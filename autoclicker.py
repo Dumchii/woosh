@@ -3,11 +3,9 @@ import threading
 from pynput.mouse import Button, Controller as MouseController
 from pynput.keyboard import Listener, KeyCode
 
-# Config variables
 click_delay = 0.5
 button = Button.left
 
-# Hotkeys
 start_click_key = KeyCode(char='k')
 exit_key = KeyCode(char='c')
 
@@ -39,14 +37,13 @@ class AutoClicker(threading.Thread):
             while self.clicking:
                 self.mouse.click(self.button)
                 time.sleep(self.delay)
-            time.sleep(0.1)  # Prevents high CPU usage when idle
+            time.sleep(0.1)
 
-# Initialize thread
 clicker_thread = AutoClicker(click_delay, button)
 clicker_thread.start()
 
 def on_press(key):
-    # Check if the exact hotkeys were pressed
+    
     if key == start_click_key:
         clicker_thread.start_clicking()
     elif key == exit_key:
@@ -54,7 +51,7 @@ def on_press(key):
         print("[INFO] Exiting script...")
         return False  
     else:
-        # Smart Brake: Only cancel if the clicker is actively running
+       
         if clicker_thread.clicking:
             print("[ALERT] Interrupted! Canceling automation.")
             clicker_thread.stop_clicking()
